@@ -21,11 +21,18 @@ export default function Filters({ setFilters, tag }) {
     fetchFilters();
   }, [tag]);
 
-  const handleFilterChange = (filterId, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [filterId]: value,
-    }));
+  const handleFilterChange = (filterName, value, checked) => {
+    setFilters((prev) => {
+      const currentValues = prev[filterName] || [];
+      const updatedValues = checked
+        ? [...currentValues, value]
+        : currentValues.filter((item) => item !== value);
+
+      return {
+        ...prev,
+        [filterName]: updatedValues.length > 0 ? updatedValues : null,
+      };
+    });
   };
 
   const handlePriceChange = ({ minPrice, maxPrice }) => {
@@ -39,14 +46,13 @@ export default function Filters({ setFilters, tag }) {
   return (
     <div className="p-4">
       <h2 className="text-lg font-medium text-gray-900">Filtros</h2>
-      <form className="mt-4 space-y-6">        
+      <form className="mt-4 space-y-6">
         <PriceFilter
           minPrice={0}
           maxPrice={10000}
           onPriceChange={handlePriceChange}
         />
 
-        {/* Outros filtros */}
         {availableFilters.map((filter) => (
           <fieldset key={filter.id}>
             <legend className="text-sm font-semibold text-gray-900">{filter.name}</legend>
@@ -56,11 +62,15 @@ export default function Filters({ setFilters, tag }) {
                   <input
                     id={`${filter.id}-${option.value}`}
                     name={filter.name}
-                    value={option.value}
+                    value={option.label} 
                     type="checkbox"
                     className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                     onChange={(e) =>
-                      handleFilterChange(filter.id, e.target.checked ? option.value : null)
+                      handleFilterChange(
+                        filter.name.toLowerCase(),
+                        option.label,
+                        e.target.checked
+                      )
                     }
                   />
                   <label
