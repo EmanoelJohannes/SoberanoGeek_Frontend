@@ -9,3 +9,14 @@
 html {
   scroll-behavior: smooth;
 }
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem 1rem; /* Ajuste o espaçamento interno */
+  border: 1px solid #d1d5db; /* Cor da borda */
+  border-radius: 0.375rem; /* Arredondamento */
+  font-size: 0.875rem; /* Tamanho do texto */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra */
+}
